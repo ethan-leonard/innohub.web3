@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Solidity](https://img.shields.io/badge/solidity-^0.8.0-blue.svg)
 ![React](https://img.shields.io/badge/react-18.0+-61DAFB.svg)
+![TypeScript](https://img.shields.io/badge/typescript-4.9+-blue.svg)
 ![Ethereum](https://img.shields.io/badge/ethereum-powered-3C3C3D.svg)
 
 ## Overview
@@ -27,7 +28,7 @@ InnoHub.Web3 follows a modern web3 architecture with these components:
 - Token reward management system
 - Integration between staking and NFT ecosystems
 
-### Frontend (React.js)
+### Frontend (React + TypeScript)
 
 - Intuitive interface for discovering and staking for events
 - NFT gallery to view owned and available collectibles
@@ -44,7 +45,7 @@ innohub.web3/
 │   ├── RewardDistributor.sol  # Token reward management
 │   └── interfaces/            # Contract interfaces
 │
-├── frontend/                  # React.js frontend
+├── frontend/                  # React TypeScript frontend
 │   ├── public/                # Static assets
 │   ├── src/
 │   │   ├── components/        # Reusable UI components
@@ -53,20 +54,22 @@ innohub.web3/
 │   │   ├── context/           # React context providers
 │   │   ├── utils/             # Utility functions
 │   │   ├── services/          # API and contract interaction
-│   │   ├── App.js             # Main application component
-│   │   └── index.js           # Entry point
+│   │   ├── types/             # TypeScript type definitions
+│   │   ├── App.tsx            # Main application component
+│   │   └── index.tsx          # Entry point
 │   ├── package.json           # Node.js dependencies
+│   ├── tsconfig.json          # TypeScript configuration
 │   └── .env                   # Environment variables (gitignored)
 │
 ├── test/                      # Smart contract tests
-│   ├── EventStaking.test.js   # Tests for staking contract
-│   └── InnoHubNFT.test.js     # Tests for NFT contract
+│   ├── EventStaking.test.ts   # Tests for staking contract
+│   └── InnoHubNFT.test.ts     # Tests for NFT contract
 │
 ├── scripts/                   # Deployment scripts
-│   ├── deploy.js              # Main deployment script
-│   └── verify.js              # Contract verification script
+│   ├── deploy.ts              # Main deployment script
+│   └── verify.ts              # Contract verification script
 │
-├── hardhat.config.js          # Hardhat configuration
+├── hardhat.config.ts          # Hardhat configuration
 ├── .gitignore                 # Git ignore file
 ├── LICENSE                    # MIT License
 └── README.md                  # Project documentation
@@ -99,10 +102,10 @@ npx hardhat test
 
 # Deploy to local network
 npx hardhat node
-npx hardhat run scripts/deploy.js --network localhost
+npx hardhat run scripts/deploy.ts --network localhost
 
 # Deploy to testnet
-npx hardhat run scripts/deploy.js --network sepolia
+npx hardhat run scripts/deploy.ts --network sepolia
 ```
 
 ### Frontend Development
@@ -116,6 +119,12 @@ npm install
 
 # Start development server
 npm start
+
+# Type checking
+npm run type-check
+
+# Build for production
+npm run build
 ```
 
 ## Smart Contract Architecture
@@ -171,19 +180,10 @@ The NFT contract implements ERC-721 standard with additional features:
 
 ### Frontend
 - React.js (UI library)
+- TypeScript (Type-safe JavaScript)
 - Web3.js/Ethers.js (Blockchain interaction)
 - MetaMask integration (Wallet connection)
 - IPFS (NFT metadata storage)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## Commit Message Guidelines
 
@@ -202,9 +202,9 @@ We follow a simple commit message format to make the project history readable. E
 
 ### Examples
 
-- ✨ feat: add SQL injection pattern detection
-- 🐛 fix: resolve false positive in XSS detection
-- 📝 docs: update installation instructions
+- ✨ feat: add event staking functionality
+- 🐛 fix: resolve wallet connection issue
+- 📝 docs: update deployment instructions
 - 💄 style: format code according to style guide
 
 ## License
