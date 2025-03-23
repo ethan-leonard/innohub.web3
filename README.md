@@ -1,158 +1,135 @@
-# InnoHub.Web3
+# InnoHub Web3: Evolving NFT Badge System
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Solidity](https://img.shields.io/badge/solidity-^0.8.0-blue.svg)
-![React](https://img.shields.io/badge/react-18.0+-61DAFB.svg)
-![TypeScript](https://img.shields.io/badge/typescript-4.9+-blue.svg)
-![Ethereum](https://img.shields.io/badge/ethereum-powered-3C3C3D.svg)
-![Polygon](https://img.shields.io/badge/polygon-ready-8247E5.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) ![React](https://img.shields.io/badge/react-19.0+-61DAFB.svg) ![TypeScript](https://img.shields.io/badge/typescript-4.9+-blue.svg) ![Solidity](https://img.shields.io/badge/solidity-0.8.0+-363636.svg)
 
 ## Overview
 
-InnoHub.Web3 is a decentralized application that implements a closed-loop token ecosystem for event management and exclusive NFT rewards. The platform uses a custom ERC-20 token (ClubToken) for event registration through staking, with attendance verification unlocking token refunds and the ability to acquire exclusive NFTs.
+InnoHub Web3 is a comprehensive digital recognition platform designed to incentivize student attendance and participation in the 8-week Innovators Hub program. The system rewards student engagement through an evolving NFT badge system on the Polygon blockchain, creating a visual representation of their achievements throughout the program.
 
-### Key Features
+## Key Features
 
-- **Closed-Loop Token System**: Custom ERC-20 token with controlled distribution and transfer mechanisms
-- **Event Staking System**: Users stake tokens to reserve spots at events, receiving tokens back upon attendance verification
-- **Exclusive NFT Marketplace**: Redeem tokens for unique NFTs with IPFS-stored metadata
-- **User-Friendly Interface**: Intuitive UI for event discovery, token management, and NFT redemption
-
-### Progress
-
-| Phase | Status | Progress |
-|-------|--------|----------|
-| Planning | 🔄 In Progress | 50% |
-| Smart Contract Development | 🔜 Not Started | 0% |
-| Frontend Development | 🔜 Not Started | 0% |
-| Testing | 🔜 Not Started | 0% |
-| Deployment | 🔜 Not Started | 0% |
-
-**Overall Progress**: `[🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜]` 10%
+- **Attendance Tracking**: Web application for recording student participation using session codes
+- **Evolving NFT Badges**: Three-tier NFT badge system that evolves based on student achievements
+- **Blockchain Integration**: Seamless minting and evolution of badges on the Polygon network
+- **Student-Friendly UI**: Simple interface that requires no prior blockchain knowledge
+- **Admin Dashboard**: Tools for session management, attendance monitoring, and badge administration
 
 ## Architecture
 
-InnoHub.Web3 follows a modern web3 architecture optimized for the Polygon PoS chain:
+InnoHub Web3 follows a modern architecture with these key components:
+
+### Frontend (React TypeScript)
+
+- Modern React with TypeScript for type safety
+- Mobile-responsive design for in-class check-ins
+- Simple student-facing interface for badge claiming
 
 ### Smart Contracts (Solidity)
 
-- **ClubToken (ERC-20)**: Non-transferable token with owner-controlled distribution
-- **EventStaking Contract**: Manages event registrations and attendance verification
-- **NFT Redemption System**: ERC-721 implementation with token-based redemption mechanics
+- ERC-721 NFT implementation with metadata upgrade capabilities
+- OpenZeppelin libraries for security and standardization
+- Gas-optimized for cost-effective operation on Polygon
 
-### Frontend (React + TypeScript)
+### Backend (Django)
 
-- Wallet integration (MetaMask/WalletConnect)
-- Dynamic event display with countdown timers and staking status
-- NFT gallery with ownership tracking and redemption interface
-- Transaction history and notification system
+- RESTful API endpoints for attendance tracking
+- Web3.py integration for blockchain communication
+- Administrative tools for program management
+
+## Flow
+
+```mermaid
+flowchart TD
+    A[Student attends session] --> B[Enters session code on web app]
+    B --> C[Backend records attendance]
+    C --> D{Eligible for badge?}
+    
+    D -->|No| E[Continue tracking]
+    D -->|Yes| F[Backend initiates minting]
+    
+    F --> G[Smart contract mints NFT]
+    G --> H[Student receives email notification]
+    
+    I[Student presents at demo day] --> J[Admin marks presentation]
+    J --> K[Backend triggers badge evolution]
+    K --> L[Badge evolves to Tier 2]
+    
+    M[Team wins competition] --> N[Admin records win]
+    N --> O[Backend triggers final evolution]
+    O --> P[Badge evolves to Tier 3]
+```
+
+## Badge Tiers
+
+The NFT badge system features three distinct tiers that evolve based on student achievements:
+
+1. **Tier 1: Attendance Badge**
+   - Granted after attending 6 out of 8 weekly sessions
+   - Represents consistent participation in the program
+   
+2. **Tier 2: Presenter Badge**
+   - Evolution of Tier 1 badge for students who present during demo day
+   - Signifies active contribution to the program
+   
+3. **Tier 3: Winner Badge**
+   - Final evolution awarded to competition winners
+   - Represents exceptional achievement and innovation
 
 ## Project Structure
 
 ```plaintext
 innohub.web3/
-├── contracts/                 # Solidity smart contracts
-│   ├── ClubToken.sol          # Custom ERC-20 implementation
-│   ├── EventStaking.sol       # Event staking implementation
-│   ├── ClubNFT.sol            # NFT redemption contract
-│   └── interfaces/            # Contract interfaces
+├── contracts/                  # Solidity smart contracts
+│   ├── BadgeNFT.sol            # Core NFT implementation
+│   ├── IBadgeNFT.sol           # Interface definitions
+│   └── libraries/              # Helper contracts and utilities
 │
-├── frontend/                  # React TypeScript frontend
-│   ├── public/                # Static assets
-│   ├── src/
-│   │   ├── components/        # Reusable UI components
-│   │   │   ├── EventCard/     # Event display component
-│   │   │   ├── NFTGallery/    # NFT display and redemption
-│   │   │   ├── WalletConnect/ # Wallet integration component
-│   │   │   └── ProgressBar/   # Animated progress indicators
-│   │   ├── pages/             # Application pages
-│   │   ├── hooks/             # Custom React hooks
-│   │   ├── context/           # React context providers
-│   │   ├── utils/             # Utility functions
-│   │   ├── services/          # API and contract interaction
-│   │   ├── types/             # TypeScript type definitions
-│   │   ├── App.tsx            # Main application component
-│   │   └── index.tsx          # Entry point
-│   ├── package.json           # Node.js dependencies
-│   ├── tsconfig.json          # TypeScript configuration
-│   └── .env                   # Environment variables (gitignored)
+├── frontend/                   # React TypeScript frontend
+│   ├── public/                 # Static assets
+│   └── src/                    # Frontend source code
 │
-├── test/                      # Smart contract tests
-│   ├── ClubToken.test.ts      # Tests for ERC-20 token
-│   ├── EventStaking.test.ts   # Tests for staking contract
-│   └── ClubNFT.test.ts        # Tests for NFT contract
+├── backend/                    # Django application
+│   ├── attendance/             # Attendance tracking
+│   ├── badges/                 # Badge management
+│   └── web3/                   # Blockchain integration
 │
-├── scripts/                   # Deployment scripts
-│   ├── deploy.ts              # Main deployment script
-│   └── verify.ts              # Contract verification script
+├── scripts/                    # Deployment and utility scripts
+│   ├── deploy.js               # Contract deployment
+│   └── verify.js               # Contract verification
 │
-├── hardhat.config.ts          # Hardhat configuration
-├── .gitignore                 # Git ignore file
-├── LICENSE                    # MIT License
-└── README.md                  # Project documentation
+├── test/                       # Contract test suite
+│   └── BadgeNFT.test.js        # NFT functionality tests
+│
+├── LICENSE                     # MIT License
+└── README.md                   # This file
 ```
-
-## Technical Requirements
-
-### ClubToken (ERC-20)
-- Name: "ClubToken", Symbol: "CLUB"
-- Non-transferable except for owner-initiated distributions
-- Disabled approval system to prevent DEX listings
-- Mintable only by contract owner
-- Initial supply: 1,000,000 tokens (18 decimals)
-- Built with OpenZeppelin libraries for security
-
-### EventStaking Contract
-- Accepts ClubToken for event registration
-- Stores stakes per event ID with:
-  - Minimum stake amount
-  - Event timeframe (start/end dates)
-  - Attendance verification flag
-- Auto-refund mechanism post-event verification
-- Reentrancy protection for all external calls
-
-### NFT Redemption Contract (ERC-721)
-- Mint exclusive NFTs using ClubToken
-- Price: 100 tokens per NFT
-- Metadata storage on IPFS
-- Royalty system (5% to contract owner)
-- Configurable supply limits
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 16+
-- MetaMask or WalletConnect-compatible wallet
-- Hardhat (for contract development)
-- Test MATIC on Mumbai testnet (recommended)
+- Python 3.8+
+- Metamask or other Web3 wallet
+- MATIC tokens for gas (Polygon Mumbai testnet)
 
-### Smart Contract Development
+### Smart Contract Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/ethan-leonard/innohub.web3.git
+# Navigate to project root
 cd innohub.web3
 
 # Install dependencies
 npm install
 
-# Compile smart contracts
+# Compile contracts
 npx hardhat compile
 
-# Run tests
-npx hardhat test
-
-# Deploy to local network
-npx hardhat node
-npx hardhat run scripts/deploy.ts --network localhost
-
-# Deploy to testnet
-npx hardhat run scripts/deploy.ts --network mumbai
+# Deploy to Mumbai testnet (requires .env configuration)
+npx hardhat run scripts/deploy.js --network mumbai
 ```
 
-### Frontend Development
-
+### Frontend Setup
 ```bash
 # Navigate to frontend directory
 cd frontend
@@ -162,98 +139,34 @@ npm install
 
 # Start development server
 npm start
-
-# Type checking
-npm run type-check
-
-# Build for production
-npm run build
 ```
 
-## Smart Contract Implementation
+## Usage
 
-### ClubToken.sol
+### For Students
 
-The ClubToken contract is a custom ERC-20 implementation with:
+1. Attend InnoHub sessions and get the session code from founders
+2. Visit the web application on your mobile device
+3. Enter your student ID and the session code
+4. After reaching 6 sessions, you'll receive an email with a link to claim your NFT
+5. Present during demo day to evolve your badge to Tier 2
+6. Win the competition to achieve the Tier 3 badge
 
-- Restricted transfer functions that only allow the contract owner to initiate transfers
-- Disabled approval mechanisms to prevent DEX listings or unauthorized transfers
-- Minting capabilities restricted to the contract owner
-- Initial supply of 1,000,000 tokens with 18 decimals
-- Complete NatSpec documentation for all functions
+### For Administrators
 
-### EventStaking.sol
-
-The EventStaking contract manages token staking for events:
-
-- Admins can create events with customizable parameters
-- Users can stake tokens to register for events
-- Attendance verification triggers token refunds
-- Built-in safeguards against reentrancy attacks
-- Gas-optimized data structures for efficient operations
-
-### ClubNFT.sol
-
-The NFT contract implements ERC-721 standard with additional features:
-
-- Token redemption using ClubToken (100 tokens per NFT)
-- IPFS integration for metadata storage
-- 5% royalty mechanism for secondary sales
-- Limited edition collections tied to specific events
-- Owner-controlled minting parameters
-
-## Frontend Features
-
-### Wallet Integration
-- Support for MetaMask and WalletConnect protocols
-- Persistent connection state
-- Network detection and switching
-- Transaction signing and confirmation flows
-
-### Event Interface
-- Filterable event listings with search functionality
-- Countdown timers to event start/end
-- Staking interface with clear status indicators
-- Attendance verification QR codes for event organizers
-
-### NFT Gallery
-- Visual display of owned NFTs with metadata
-- Redemption interface with token balance tracking
-- IPFS-powered image loading with fallback mechanisms
-- NFT detail view with ownership history
-
-### Enhanced Progress Bar
-The application includes an animated progress bar component with:
-- Smooth animations using CSS transitions
-- Color-coded status indicators
-- Loading states with shimmer effects
-- Customizable themes to match the application's design system
-- Support for different progress types (determinate, indeterminate)
-
-## Implementation Guidelines
-
-1. Start with ClubToken implementation, ensuring all transfer restrictions work correctly
-2. Develop EventStaking contract with proper token integration and refund mechanisms
-3. Build the NFT redemption system with IPFS metadata support
-4. Implement frontend components with responsive design and wallet connectivity
-5. Add comprehensive test coverage for all contract functionalities
-6. Optimize contracts for deployment on Polygon PoS chain
+1. Log in to the admin dashboard
+2. Generate unique session codes for each meeting
+3. Monitor student attendance and badge statuses
+4. Manually trigger badge evolutions for demo day participants and winners
+5. View analytics on program participation
 
 ## Technologies Used
 
-### Smart Contract Development
-- Solidity 0.8.x (Contract language)
-- Hardhat (Development environment)
-- OpenZeppelin (Contract libraries)
-- Ethers.js (Blockchain interaction)
-- IPFS (Metadata storage)
-
-### Frontend
-- React.js (UI library)
-- TypeScript (Type-safe JavaScript)
-- Ethers.js (Blockchain interaction)
-- MetaMask/WalletConnect integration
-- Framer Motion (Animation library)
+- **Smart Contracts**: Solidity, Hardhat, OpenZeppelin
+- **Frontend**: React, TypeScript, ethers.js
+- **Backend**: Django, Web3.py, SQLite
+- **Blockchain**: Polygon (Mumbai testnet/mainnet)
+- **Storage**: IPFS for badge metadata and images
 
 ## Commit Message Guidelines
 
@@ -272,19 +185,21 @@ We follow a simple commit message format to make the project history readable. E
 
 ### Examples
 
-- ✨ feat: implement ClubToken transfer restrictions
-- 🐛 fix: resolve event staking refund mechanism
-- 📝 docs: add NatSpec documentation to contracts
-- 💄 style: improve animated progress bar
+- ✨ feat: add SQL injection pattern detection
+- 🐛 fix: resolve false positive in XSS detection
+- 📝 docs: update installation instructions
+- 💄 style: format code according to style guide
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [`LICENSE`](LICENSE) file for details.
 
 ## Contact
+
+Project Maintainer: Ethan Leonard
 
 Project Link: [https://github.com/ethan-leonard/innohub.web3](https://github.com/ethan-leonard/innohub.web3)
 
 ---
 
-**Note**: This project is currently under development. Features and capabilities are subject to change.
+**Note**: This project is currently under development. Features and implementation details are subject to change.
