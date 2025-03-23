@@ -5,55 +5,66 @@
 ![React](https://img.shields.io/badge/react-18.0+-61DAFB.svg)
 ![TypeScript](https://img.shields.io/badge/typescript-4.9+-blue.svg)
 ![Ethereum](https://img.shields.io/badge/ethereum-powered-3C3C3D.svg)
+![Polygon](https://img.shields.io/badge/polygon-ready-8247E5.svg)
 
 ## Overview
 
-InnoHub.Web3 is a decentralized application that combines event token staking with NFT minting capabilities. The platform encourages event attendance through a stake-to-attend model while rewarding participants with exclusive NFTs that provide additional benefits.
-
-## Progress
-
-- Current Phase: Planning
-- Overall Project Progress: 🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜ (10%)
+InnoHub.Web3 is a decentralized application that implements a closed-loop token ecosystem for event management and exclusive NFT rewards. The platform uses a custom ERC-20 token (ClubToken) for event registration through staking, with attendance verification unlocking token refunds and the ability to acquire exclusive NFTs.
 
 ### Key Features
 
-- **Event Staking System**: Users stake tokens to reserve spots at events, receiving their tokens back (plus potential rewards) upon attendance
-- **NFT Marketplace**: Mint, view, and trade unique digital collectibles
-- **Integrated Ecosystem**: Use staked tokens or rewards to purchase exclusive NFTs
-- **User-Friendly Interface**: Seamless experience for both crypto-savvy users and newcomers
+- **Closed-Loop Token System**: Custom ERC-20 token with controlled distribution and transfer mechanisms
+- **Event Staking System**: Users stake tokens to reserve spots at events, receiving tokens back upon attendance verification
+- **Exclusive NFT Marketplace**: Redeem tokens for unique NFTs with IPFS-stored metadata
+- **User-Friendly Interface**: Intuitive UI for event discovery, token management, and NFT redemption
+
+### Progress
+
+| Phase | Status | Progress |
+|-------|--------|----------|
+| Planning | 🔄 In Progress | 50% |
+| Smart Contract Development | 🔜 Not Started | 0% |
+| Frontend Development | 🔜 Not Started | 0% |
+| Testing | 🔜 Not Started | 0% |
+| Deployment | 🔜 Not Started | 0% |
+
+**Overall Progress**: `[🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜]` 10%
 
 ## Architecture
 
-InnoHub.Web3 follows a modern web3 architecture with these components:
+InnoHub.Web3 follows a modern web3 architecture optimized for the Polygon PoS chain:
 
 ### Smart Contracts (Solidity)
 
-- Event staking contract with attendance verification
-- ERC-721 compliant NFT implementation
-- Token reward management system
-- Integration between staking and NFT ecosystems
+- **ClubToken (ERC-20)**: Non-transferable token with owner-controlled distribution
+- **EventStaking Contract**: Manages event registrations and attendance verification
+- **NFT Redemption System**: ERC-721 implementation with token-based redemption mechanics
 
 ### Frontend (React + TypeScript)
 
-- Intuitive interface for discovering and staking for events
-- NFT gallery to view owned and available collectibles
-- Wallet connection and management
-- Transaction status monitoring
+- Wallet integration (MetaMask/WalletConnect)
+- Dynamic event display with countdown timers and staking status
+- NFT gallery with ownership tracking and redemption interface
+- Transaction history and notification system
 
 ## Project Structure
 
 ```plaintext
 innohub.web3/
 ├── contracts/                 # Solidity smart contracts
+│   ├── ClubToken.sol          # Custom ERC-20 implementation
 │   ├── EventStaking.sol       # Event staking implementation
-│   ├── InnoHubNFT.sol         # NFT contract implementation
-│   ├── RewardDistributor.sol  # Token reward management
+│   ├── ClubNFT.sol            # NFT redemption contract
 │   └── interfaces/            # Contract interfaces
 │
 ├── frontend/                  # React TypeScript frontend
 │   ├── public/                # Static assets
 │   ├── src/
 │   │   ├── components/        # Reusable UI components
+│   │   │   ├── EventCard/     # Event display component
+│   │   │   ├── NFTGallery/    # NFT display and redemption
+│   │   │   ├── WalletConnect/ # Wallet integration component
+│   │   │   └── ProgressBar/   # Animated progress indicators
 │   │   ├── pages/             # Application pages
 │   │   ├── hooks/             # Custom React hooks
 │   │   ├── context/           # React context providers
@@ -67,8 +78,9 @@ innohub.web3/
 │   └── .env                   # Environment variables (gitignored)
 │
 ├── test/                      # Smart contract tests
+│   ├── ClubToken.test.ts      # Tests for ERC-20 token
 │   ├── EventStaking.test.ts   # Tests for staking contract
-│   └── InnoHubNFT.test.ts     # Tests for NFT contract
+│   └── ClubNFT.test.ts        # Tests for NFT contract
 │
 ├── scripts/                   # Deployment scripts
 │   ├── deploy.ts              # Main deployment script
@@ -80,14 +92,40 @@ innohub.web3/
 └── README.md                  # Project documentation
 ```
 
+## Technical Requirements
+
+### ClubToken (ERC-20)
+- Name: "ClubToken", Symbol: "CLUB"
+- Non-transferable except for owner-initiated distributions
+- Disabled approval system to prevent DEX listings
+- Mintable only by contract owner
+- Initial supply: 1,000,000 tokens (18 decimals)
+- Built with OpenZeppelin libraries for security
+
+### EventStaking Contract
+- Accepts ClubToken for event registration
+- Stores stakes per event ID with:
+  - Minimum stake amount
+  - Event timeframe (start/end dates)
+  - Attendance verification flag
+- Auto-refund mechanism post-event verification
+- Reentrancy protection for all external calls
+
+### NFT Redemption Contract (ERC-721)
+- Mint exclusive NFTs using ClubToken
+- Price: 100 tokens per NFT
+- Metadata storage on IPFS
+- Royalty system (5% to contract owner)
+- Configurable supply limits
+
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 16+
-- MetaMask or other Web3 wallet
+- MetaMask or WalletConnect-compatible wallet
 - Hardhat (for contract development)
-- Test ETH on a testnet (Sepolia or Goerli recommended)
+- Test MATIC on Mumbai testnet (recommended)
 
 ### Smart Contract Development
 
@@ -110,7 +148,7 @@ npx hardhat node
 npx hardhat run scripts/deploy.ts --network localhost
 
 # Deploy to testnet
-npx hardhat run scripts/deploy.ts --network sepolia
+npx hardhat run scripts/deploy.ts --network mumbai
 ```
 
 ### Frontend Development
@@ -132,63 +170,90 @@ npm run type-check
 npm run build
 ```
 
-## Smart Contract Architecture
+## Smart Contract Implementation
+
+### ClubToken.sol
+
+The ClubToken contract is a custom ERC-20 implementation with:
+
+- Restricted transfer functions that only allow the contract owner to initiate transfers
+- Disabled approval mechanisms to prevent DEX listings or unauthorized transfers
+- Minting capabilities restricted to the contract owner
+- Initial supply of 1,000,000 tokens with 18 decimals
+- Complete NatSpec documentation for all functions
 
 ### EventStaking.sol
 
-The EventStaking contract manages the token staking process for events:
+The EventStaking contract manages token staking for events:
 
-- Users stake a predetermined amount of tokens to reserve spots at events
-- Event organizers can set various parameters like stake amount and capacity
-- Attendees receive their stake back, plus potential rewards, after verification
-- No-shows forfeit their stake, which is redistributed or used for platform development
+- Admins can create events with customizable parameters
+- Users can stake tokens to register for events
+- Attendance verification triggers token refunds
+- Built-in safeguards against reentrancy attacks
+- Gas-optimized data structures for efficient operations
 
-### InnoHubNFT.sol
+### ClubNFT.sol
 
 The NFT contract implements ERC-721 standard with additional features:
 
-- Minting of unique digital collectibles with metadata
-- Integration with the staking system for token-based purchases
-- Special properties for NFTs that represent event attendance or achievement
-- Optional royalty mechanisms for creators
+- Token redemption using ClubToken (100 tokens per NFT)
+- IPFS integration for metadata storage
+- 5% royalty mechanism for secondary sales
+- Limited edition collections tied to specific events
+- Owner-controlled minting parameters
 
-## Usage Scenarios
+## Frontend Features
 
-### For Event Organizers
+### Wallet Integration
+- Support for MetaMask and WalletConnect protocols
+- Persistent connection state
+- Network detection and switching
+- Transaction signing and confirmation flows
 
-1. Create a new event by setting parameters (name, date, location, stake amount)
-2. Monitor registrations and manage event capacity
-3. Verify attendance using QR codes or other verification methods
-4. Distribute rewards to attendees (optional)
+### Event Interface
+- Filterable event listings with search functionality
+- Countdown timers to event start/end
+- Staking interface with clear status indicators
+- Attendance verification QR codes for event organizers
 
-### For Attendees
+### NFT Gallery
+- Visual display of owned NFTs with metadata
+- Redemption interface with token balance tracking
+- IPFS-powered image loading with fallback mechanisms
+- NFT detail view with ownership history
 
-1. Browse available events in the platform
-2. Stake tokens to secure a spot at desired events
-3. Attend events and get stake back plus potential rewards
-4. Use earned tokens to purchase exclusive NFTs
+### Enhanced Progress Bar
+The application includes an animated progress bar component with:
+- Smooth animations using CSS transitions
+- Color-coded status indicators
+- Loading states with shimmer effects
+- Customizable themes to match the application's design system
+- Support for different progress types (determinate, indeterminate)
 
-### For Collectors
+## Implementation Guidelines
 
-1. Browse available NFTs in the marketplace
-2. Purchase NFTs using staked tokens or other crypto
-3. View owned NFTs in personal gallery
-4. Trade or transfer NFTs through the platform
+1. Start with ClubToken implementation, ensuring all transfer restrictions work correctly
+2. Develop EventStaking contract with proper token integration and refund mechanisms
+3. Build the NFT redemption system with IPFS metadata support
+4. Implement frontend components with responsive design and wallet connectivity
+5. Add comprehensive test coverage for all contract functionalities
+6. Optimize contracts for deployment on Polygon PoS chain
 
 ## Technologies Used
 
 ### Smart Contract Development
-- Solidity (Contract language)
+- Solidity 0.8.x (Contract language)
 - Hardhat (Development environment)
 - OpenZeppelin (Contract libraries)
 - Ethers.js (Blockchain interaction)
+- IPFS (Metadata storage)
 
 ### Frontend
 - React.js (UI library)
 - TypeScript (Type-safe JavaScript)
-- Web3.js/Ethers.js (Blockchain interaction)
-- MetaMask integration (Wallet connection)
-- IPFS (NFT metadata storage)
+- Ethers.js (Blockchain interaction)
+- MetaMask/WalletConnect integration
+- Framer Motion (Animation library)
 
 ## Commit Message Guidelines
 
@@ -207,10 +272,10 @@ We follow a simple commit message format to make the project history readable. E
 
 ### Examples
 
-- ✨ feat: add event staking functionality
-- 🐛 fix: resolve wallet connection issue
-- 📝 docs: update deployment instructions
-- 💄 style: format code according to style guide
+- ✨ feat: implement ClubToken transfer restrictions
+- 🐛 fix: resolve event staking refund mechanism
+- 📝 docs: add NatSpec documentation to contracts
+- 💄 style: improve animated progress bar
 
 ## License
 
