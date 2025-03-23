@@ -12,8 +12,8 @@ InnoHub.Web3 is a decentralized application that combines event token staking wi
 
 ## Progress
 
-Current Phase: Planning 
-Overall Project Progress: 🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜ (10%)
+- Current Phase: Planning
+- Overall Project Progress: 🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜ (10%)
 
 ### Key Features
 
