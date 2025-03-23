@@ -10,6 +10,11 @@
 
 InnoHub.Web3 is a decentralized application that combines event token staking with NFT minting capabilities. The platform encourages event attendance through a stake-to-attend model while rewarding participants with exclusive NFTs that provide additional benefits.
 
+## Progress
+
+Current Phase: Planning 
+Overall Project Progress: 🟩⬜⬜⬜⬜⬜⬜⬜⬜⬜ (10%)
+
 ### Key Features
 
 - **Event Staking System**: Users stake tokens to reserve spots at events, receiving their tokens back (plus potential rewards) upon attendance
