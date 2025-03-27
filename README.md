@@ -26,7 +26,7 @@ InnoHub Web3 follows a modern architecture with these key components:
 
 ### Smart Contracts (Solidity)
 
-- ERC-721 NFT implementation with metadata upgrade capabilities
+- ERC-1155 NFT implementation with metadata upgrade capabilities
 - OpenZeppelin libraries for security and standardization
 - Gas-optimized for cost-effective operation on Polygon
 
